@@ -31,28 +31,30 @@ Attribute POC_maintainance.VB_ProcData.VB_Invoke_Func = "R\n14"
 '   [ PREREQUISITE : The column 'E' and subsequent columns are blank in the sheet 'Dump' ]
 '
     Range("Table_Dump[[#Data],[POC IDs]]").Copy
-    Range("E2").PasteSpecial Paste:=xlPasteValues, _
-        Operation:=xlNone, SkipBlanks:=False, Transpose:=False
+    With Sheets("Dump")
+        .Range("E2").PasteSpecial Paste:=xlPasteValues, _
+            Operation:=xlNone, SkipBlanks:=False, Transpose:=False
 '
-    Selection.TextToColumns Destination:=Range("E2"), DataType:=xlDelimited, _
-        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=True, _
-        Tab:=True, Comma:=True, Space:=True, _
-        TrailingMinusNumbers:=False
+        .Range("E2").CurrentRegion.TextToColumns Destination:=Range("E2"), _
+            DataType:=xlDelimited, _
+            TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=True, _
+            Tab:=True, Comma:=True, Space:=True, _
+            TrailingMinusNumbers:=False
+    End With
  
  
 '=> STEP-3: Removing Duplicates ......
 '   [ PREREQUISITE : There is blank sheet named 'Working' ]
 '
-    Range("E2").CurrentRegion.Copy
-    Sheets("Working").Select
-    Range("A2").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, _
+    Sheets("Dump").Range("E2").CurrentRegion.Copy
+    Sheets("Working").Range("A2").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, _
         SkipBlanks:=False, Transpose:=True
     Range("Table_Dump[[#Data],[Rule id]]").Copy
-    Range("A1").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, _
+    Sheets("Working").Range("A1").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, _
         SkipBlanks:=False, Transpose:=True
 '
     Dim rng As Range, col As Long
-    Set rng = Range("A1").CurrentRegion
+    Set rng = Sheets("Working").Range("A1").CurrentRegion
     For col = 1 To rng.Columns.Count
         rng.Columns(col).RemoveDuplicates Columns:=1, Header:=xlYes
     Next col
@@ -63,7 +65,7 @@ Attribute POC_maintainance.VB_ProcData.VB_Invoke_Func = "R\n14"
     Sheets("Dump").Range("E2").CurrentRegion.ClearContents
     rng.Rows(1).Font.Bold = True
     rng.Columns.AutoFit
-
+    Sheets("Working").Select
 
 End Sub
 
