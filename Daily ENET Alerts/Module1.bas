@@ -3,16 +3,16 @@ Sub Daily_ENET_count()
 Attribute Daily_ENET_count.VB_ProcData.VB_Invoke_Func = "R\n14"
 '
 '=> PREPROCESSING:
-'    SQL dump of daily ENET/CBX transactions on the sheet 'Base', in Text format _
-     Select column 'SD_RULES' from the dump _
+'    SQL dump of daily ENET/CBX transactions on the sheet 'Base', in Text format
+'    Select column 'SD_RULES' from the dump
 '
 '=> RUN Macro: Daily_ENET_count
 '=> Keyboard Shortcut: Ctrl+Shift+R
 '
 '=> OUTPUT:
-'    Table of Rule id wise alert counts, _
-     along with Rule Name and Portfolio, _
-     sorted by count of gross alerts
+'    Table of Rule id wise alert counts
+'     along with Rule Name and Portfolio,
+'     sorted by count of gross alerts
 '
 '
 '   ----- @idnantimar 1/14/2025 15:20
@@ -90,8 +90,8 @@ Attribute Daily_ENET_count.VB_ProcData.VB_Invoke_Func = "R\n14"
        
 
 '=> STEP-4: The final table to submit ......
-'   [ PREREQUISITE : There is a table named 'Rules_Table' _
-        with column of Rule ids followed by the column names 'Rule Name', 'Portfolio' ]
+'   [ PREREQUISITE : There is a table named 'Rules_Table'
+'       with column of Rule ids followed by the column names 'Rule Name', 'Portfolio' ]
 '
     ActiveSheet.PivotTables("PivotTable1").TableRange2.Copy
     Range("F1").PasteSpecial Paste:=xlPasteValues, _
