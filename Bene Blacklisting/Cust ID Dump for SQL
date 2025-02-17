@@ -1,0 +1,8 @@
+let 
+
+    #"Extract Cust ID" = Table.TransformColumns(
+        Table.SelectColumns(#"Merged Working File",{"Cust ID"}),
+        {{"Cust ID", each "'" & _ & "',", type text}}
+    )
+in
+    #"Extract Cust ID"
