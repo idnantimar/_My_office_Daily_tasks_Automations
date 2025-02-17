@@ -1,0 +1,33 @@
+let 
+
+    //> Preparing list of POC IDs
+    #"POC ID" = Table.FromList(
+        {"CBXNRT", 
+         "ENCXNRT", 
+         "ENETNRT", 
+         "ENETRT"}, // modify the list as per requirement 
+    Splitter.SplitByNothing(), {"POC"}),
+    #"POC ID txt" = Table.TransformColumnTypes(#"POC ID", {{"POC", type text}}),
+
+    //> Extract distinct Bene A/c that are disputed .....
+    #"Extract Bene Ac" = Table.SelectColumns(#"Bene Ac from PRM dump",{"SD_SEC_ACCT_NUM"}),
+    #"Removed Duplicates Bene" = Table.Distinct(#"Extract Bene Ac"),
+
+    //> Cross Join Bene A/c with POC IDs .....
+    #"Cross Join" = Table.AddColumn(
+        #"POC ID txt", "Joined", each #"Removed Duplicates Bene"
+    ),
+    #"Expanded Table" = Table.ExpandTableColumn(#"Cross Join", "Joined",{"SD_SEC_ACCT_NUM"}),
+    #"Expanded Table txt" = Table.TransformColumnTypes(#"Expanded Table", {{"SD_SEC_ACCT_NUM", type text}}),
+    #"Concat" = Table.AddColumn(#"Expanded Table txt", "BL",
+        each Text.Combine({Text.From([POC]), ",", Text.From([SD_SEC_ACCT_NUM]), ",,,,,,,,"}, ""),
+    type text),
+
+    //> Final Output .....
+    #"Out" = Table.TransformColumnTypes(
+        Table.SelectColumns(#"Concat",{"BL"}), 
+        {{"BL", type text}})
+
+    
+in 
+ #"Out"
