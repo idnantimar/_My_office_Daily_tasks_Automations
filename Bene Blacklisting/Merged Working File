@@ -1,0 +1,8 @@
+let 
+
+    //> Mapping Cust ID from "Referral" to "CRFIR" table ......
+    Working = Table.NestedJoin(CRFIR, "Child case", Referral, "Child Case Number", "Combined", JoinKind.LeftOuter),
+    #"Merged Data" = Table.ExpandTableColumn(Working, "Combined", {"Cust ID"})
+    
+in
+   #"Merged Data"
